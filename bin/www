@@ -28,6 +28,40 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+var mysql = require('mysql');
+
+/* socket.ioを導入 */
+var io = require('socket.io').listen(server);
+
+var connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  database: 'myweb'
+});
+
+connection.connect();
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+  socket.on('msg update', function(socket){
+    // if connected, present db's message
+  });
+
+  socket.on('msg send', function(msg){
+    socket.emit('msg push', msg);
+    // socket.broadcast.emit('msg push', msg);
+    // register to DB
+    // });
+  });
+
+  socket.on('disconnect', function(){
+    console.log('user disconnected');
+  });
+  // socket.on('message', function(msg){
+  //   //console.log('message: ' + msg);
+  //   io.emit('message', msg);
+  // })
+});
 
 /**
  * Normalize a port into a number, string, or false.

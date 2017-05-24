@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/public/third_party/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="/public/stylesheets/note.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Project name</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="./">Home</a></li>
+            <li class="active"><a href="#">Cyber-Note</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+ 
+    <div class="container">
+      <h2>Cyber-Note</h2>
+      <ul id="messages"></ul>
+      <form>
+        <div class="input-group">
+          <input type="text" class="form-control" id="m" placeholder="input here">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-default">send</button>
+          </span>
+        </div>
+      </form>
+    </div>
+ 
+    <script type="text/javascript" src="/public/third_party/jquery/dist/jquery.js"></script>
+    <script type="text/javascript" src="/public/third_party/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      $(function(){
+        var socket=io();
+        socket.on('connect', function(){
+          socket.emit('msg update');
+        });
+        $('form').submit(function(){
+          //console.log($('#m').val());
+          socket.emit('msg send', $('#m').val());
+          $('#m').val('');
+          return false;
+        });
+        socket.on('msg push', function(msg){
+          $('#messages').append($('<li>').text(msg));
+        });
+
+        socket.on('msg open', function(msg){
+          if(msg.length == 0){
+            return;
+          }else{
+            $('#messages').empty();
+            $.each(msg, function(key, value){
+              $('#messages').append($('<li>').text(value.msg));
+            });
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

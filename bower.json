@@ -1,0 +1,21 @@
+{
+  "name": "my-web",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Yuchie <yuchie.gomi@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Yuchie/my-web",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "2",
+    "bootstrap": "^3.3.7"
+  }
+}
