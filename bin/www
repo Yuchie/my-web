@@ -47,6 +47,7 @@ io.on('connection', function(socket){
 
   socket.on('msg send', function(msg){
     socket.emit('msg push', msg);
+    socket.broadcast.emit('msg push', msg);
     // register to DB
     var query = 'INSERT INTO messages (message) VALUES ("' + msg + '")';
     connection.query(query, function(err, rows){
